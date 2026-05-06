@@ -23,6 +23,7 @@ abstract class HttpException extends BaseHttpException
      *
      * @var string
      */
+
     #[\Override]
     protected $message = '';
 

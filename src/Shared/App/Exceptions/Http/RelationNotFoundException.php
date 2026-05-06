@@ -9,12 +9,14 @@ class RelationNotFoundException extends HttpException
     /**
      * An HTTP status code.
      */
+
     #[\Override]
     protected int $status = 422;
 
     /**
      * An error code.
      */
+
     #[\Override]
     protected string $errorCode = 'relation_not_found';
 }
