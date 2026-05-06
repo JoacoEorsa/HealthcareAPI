@@ -9,12 +9,14 @@ class ForbiddenException extends HttpException
     /**
      * An HTTP status code.
      */
+
     #[\Override]
     protected int $status = 403;
 
     /**
      * An error code.
      */
+
     #[\Override]
     protected string $errorCode = 'forbidden';
 }

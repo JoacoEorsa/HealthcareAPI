@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightit\Shared\App\Exceptions\Http;
 
-class UnauthenticatedException extends HttpException
+class UnauthorizedException extends HttpException
 {
     /**
      * An HTTP status code.
@@ -15,7 +15,6 @@ class UnauthenticatedException extends HttpException
     /**
      * The error code.
      */
-
     #[\Override]
-    protected string $errorCode = 'unauthenticated';
+    protected string $errorCode = 'unauthorized';
 }

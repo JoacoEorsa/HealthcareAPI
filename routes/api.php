@@ -21,7 +21,7 @@ use Lightit\Users\App\Controllers\UpdateUserController;
 |
 */
 
-Route::middleware('auth:sanctum')
+Route::middleware('auth:api')
     ->get('/me', fn(
         #[CurrentUser] $user
     ) => response()->json([

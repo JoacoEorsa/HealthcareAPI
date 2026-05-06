@@ -9,12 +9,14 @@ class InvalidActionException extends HttpException
     /**
      * The HTTP status code.
      */
+
     #[\Override]
     protected int $status = 422;
 
     /**
      * The error code.
      */
+
     #[\Override]
     protected string $errorCode = 'invalid_action';
 
@@ -23,6 +25,7 @@ class InvalidActionException extends HttpException
      *
      * @var string
      */
+
     #[\Override]
     protected $message = 'This is an invalid action';
 }

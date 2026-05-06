@@ -12,12 +12,14 @@ class TestCommand extends Command
     /**
      * @var string
      */
+
     #[\Override]
     protected $signature = 'app:test-command';
 
     /**
      * @var string
      */
+
     #[\Override]
     protected $description = 'Command Tester';
 

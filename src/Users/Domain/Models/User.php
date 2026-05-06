@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Lightit\Users\Domain\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Lightitlabs\Models\JWTAuthenticatable;
 
 /**
  * @property int                          $id
@@ -37,9 +36,8 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends JWTAuthenticatable
 {
-    use HasApiTokens;
     use Notifiable;
 
     #[\Override]
