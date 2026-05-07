@@ -15,9 +15,9 @@ return new class extends Migration
             $table->foreignId('doctor_id')->constrained()->restrictOnDelete();
             $table->foreignId('patient_id')->constrained()->restrictOnDelete();
             $table->foreignId('clinic_id')->constrained()->restrictOnDelete();
-            $table->timestamp('starts_at')->notNull();
-            $table->timestamp('ends_at')->notNull();
-            $table->enum('status', ['scheduled', 'completed', 'cancelled'])->notNull()->default('scheduled');
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at');
+            $table->enum('status', ['scheduled', 'completed', 'cancelled'])->default('scheduled');
             $table->timestamps();
         });
     }
