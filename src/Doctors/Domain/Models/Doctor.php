@@ -6,7 +6,10 @@ namespace Lightit\Doctors\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Clinics\Domain\Models\Clinic;
+
 
 /**
  * @property int                          $id
@@ -44,8 +47,8 @@ class Doctor extends Model
         return $this->belongsToMany(Clinic::class);
     }
 
-    // public function appointments(): HasMany
-// {
-//     return $this->hasMany(Appointment::class);
-// }
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

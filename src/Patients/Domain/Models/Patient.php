@@ -6,9 +6,33 @@ namespace Lightit\Patients\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lightit\Appointments\Domain\Models\Appointment;
 
+/**
+ * @property int                          $id
+ * @property string                       $first_name
+ * @property string                       $last_name
+ * @property string                       $email
+ * @property string                       $password
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 class Patient extends Model
 {
+    #[\Override]
     protected $fillable = [
         'first_name',
         'last_name',
@@ -16,8 +40,8 @@ class Patient extends Model
         'password',
     ];
 
-    // public function appointments(): HasMany
-    // {
-    //     return $this->hasMany(Appointment::class);
-    // }
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }
