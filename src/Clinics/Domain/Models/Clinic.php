@@ -6,9 +6,9 @@ namespace Lightit\Clinics\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Lightit\Doctors\Domain\Models\Doctor;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lightit\Appointments\Domain\Models\Appointment;
+use Lightit\Doctors\Domain\Models\Doctor;
 
 /**
  * @property int                          $id
@@ -16,6 +16,8 @@ use Lightit\Appointments\Domain\Models\Appointment;
  * @property string                       $address
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
+ * @property-read int|null $appointments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Doctor> $doctors
  * @property-read int|null $doctors_count
  *
@@ -46,7 +48,10 @@ class Clinic extends Model
         return $this->belongsToMany(Doctor::class);
     }
 
-        public function appointments(): HasMany
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Lightit\Appointments\Domain\Models\Appointment, $this>
+     */
+    public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }
