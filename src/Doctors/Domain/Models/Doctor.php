@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Clinics\Domain\Models\Clinic;
+use Lightit\DoctorsClinics\Domain\Models\DoctorClinic;
 
 /**
  * @property int                     $id
@@ -18,6 +19,7 @@ use Lightit\Clinics\Domain\Models\Clinic;
  * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
  * @property-read int|null $appointments_count
+ * @property-read DoctorClinic|null $pivot
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Clinic> $clinics
  * @property-read int|null $clinics_count
  *
@@ -38,11 +40,14 @@ class Doctor extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Lightit\Clinics\Domain\Models\Clinic, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Lightit\Clinics\Domain\Models\Clinic, $this, \Lightit\DoctorsClinics\Domain\Models\DoctorClinic>
      */
     public function clinics(): BelongsToMany
     {
-        return $this->belongsToMany(Clinic::class);
+        return $this->belongsToMany(Clinic::class)
+            ->using(DoctorClinic::class)
+            ->withPivot('ended_at')
+            ->withTimestamps();
     }
 
     /**
