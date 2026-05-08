@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('doctor_id')->constrained(table: 'doctors');
             $table->foreignId('clinic_id')->constrained(table: 'clinics');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamp('updated_at')->useCurrent();
             $table->timestamp('ended_at')->nullable();
         });
     }

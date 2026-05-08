@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('ends_at');
             $table->string('status')->default('scheduled');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
