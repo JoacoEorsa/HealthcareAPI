@@ -11,15 +11,15 @@ use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
 
 /**
- * @property int                          $id
- * @property int                          $doctor_id
- * @property int                          $patient_id
- * @property int                          $clinic_id
- * @property \Carbon\CarbonImmutable      $starts_at
- * @property \Carbon\CarbonImmutable      $ends_at
- * @property string                       $status
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property int                     $id
+ * @property int                     $doctor_id
+ * @property int                     $patient_id
+ * @property int                     $clinic_id
+ * @property \Carbon\CarbonImmutable $starts_at
+ * @property \Carbon\CarbonImmutable $ends_at
+ * @property string                  $status
+ * @property \Carbon\CarbonImmutable $created_at
+ * @property \Carbon\CarbonImmutable $updated_at
  * @property-read Clinic $clinic
  * @property-read Doctor $doctor
  * @property-read Patient $patient
@@ -48,14 +48,7 @@ class Appointment extends Model
     ];
 
     #[\Override]
-    protected $fillable = [
-        'doctor_id',
-        'patient_id',
-        'clinic_id',
-        'starts_at',
-        'ends_at',
-        'status',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Lightit\Doctors\Domain\Models\Doctor, $this>

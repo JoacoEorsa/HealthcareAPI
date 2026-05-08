@@ -11,10 +11,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctor_clinic', function (Blueprint $table) {
-            $table->foreignId('doctor_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('clinic_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('doctor_id')->constrained();
+            $table->foreignId('clinic_id')->constrained();
             $table->primary(['doctor_id', 'clinic_id']);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

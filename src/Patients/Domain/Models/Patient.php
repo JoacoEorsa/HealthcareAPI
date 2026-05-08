@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lightit\Appointments\Domain\Models\Appointment;
 
 /**
- * @property int                          $id
- * @property string                       $first_name
- * @property string                       $last_name
- * @property string                       $email
- * @property string                       $password
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property int                     $id
+ * @property string                  $first_name
+ * @property string                  $last_name
+ * @property string                  $email
+ * @property string                  $password
+ * @property \Carbon\CarbonImmutable $created_at
+ * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
  * @property-read int|null $appointments_count
  *
@@ -35,12 +35,7 @@ use Lightit\Appointments\Domain\Models\Appointment;
 class Patient extends Model
 {
     #[\Override]
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Lightit\Appointments\Domain\Models\Appointment, $this>

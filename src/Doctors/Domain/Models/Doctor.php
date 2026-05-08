@@ -11,11 +11,11 @@ use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Clinics\Domain\Models\Clinic;
 
 /**
- * @property int                          $id
- * @property string                       $first_name
- * @property string                       $last_name
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property int                     $id
+ * @property string                  $first_name
+ * @property string                  $last_name
+ * @property \Carbon\CarbonImmutable $created_at
+ * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
  * @property-read int|null $appointments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Clinic> $clinics
@@ -35,10 +35,7 @@ use Lightit\Clinics\Domain\Models\Clinic;
 class Doctor extends Model
 {
     #[\Override]
-    protected $fillable = [
-        'first_name',
-        'last_name',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Lightit\Clinics\Domain\Models\Clinic, $this, \Illuminate\Database\Eloquent\Relations\Pivot>

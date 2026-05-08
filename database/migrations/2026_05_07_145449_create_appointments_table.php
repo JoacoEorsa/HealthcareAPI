@@ -12,13 +12,14 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained()->restrictOnDelete();
-            $table->foreignId('patient_id')->constrained()->restrictOnDelete();
-            $table->foreignId('clinic_id')->constrained()->restrictOnDelete();
+            $table->foreignId('doctor_id')->constrained();
+            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
-            $table->enum('status', ['scheduled', 'completed', 'cancelled'])->default('scheduled');
-            $table->timestamps();
+            $table->string('status')->default('scheduled');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
