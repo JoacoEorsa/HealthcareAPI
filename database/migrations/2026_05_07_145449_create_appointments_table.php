@@ -12,9 +12,9 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained();
-            $table->foreignId('patient_id')->constrained();
-            $table->foreignId('clinic_id')->constrained();
+            $table->foreignId('doctor_id')->constrained(table: 'doctors');
+            $table->foreignId('patient_id')->constrained(table: 'patients');
+            $table->foreignId('clinic_id')->constrained(table: 'clinics');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->string('status')->default('scheduled');
