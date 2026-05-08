@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Schedule;
 use Lightit\Appointments\Domain\Models\Appointment;
-use Lightit\Appointments\Domain\Enums;
 use Lightit\Appointments\Domain\Enums\AppointmentStatus;
+use Database\Factories\DoctorFactory;
+use Database\Factories\ClinicFactory;
+use Database\Factories\PatientFactory;
 
 /**
  * @extends Factory<Appointment>
