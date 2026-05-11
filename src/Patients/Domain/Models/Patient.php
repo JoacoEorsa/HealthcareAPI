@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Lightit\Patients\Domain\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lightit\Appointments\Domain\Models\Appointment;
+use Lightitlabs\Models\JWTAuthenticatable;
 
 /**
  * @property int                     $id
  * @property string                  $first_name
  * @property string                  $last_name
- * @property string                  $email
+ * @property mixed|null              $email
  * @property string                  $password
+ * @property string|null             $remember_token
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
@@ -28,14 +30,28 @@ use Lightit\Appointments\Domain\Models\Appointment;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
-class Patient extends Model
+class Patient extends JWTAuthenticatable
 {
     #[\Override]
     protected $guarded = ['id'];
+
+    #[\Override]
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Lightit\Appointments\Domain\Models\Appointment, $this>
@@ -43,5 +59,22 @@ class Patient extends Model
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * @return Attribute<string, string>
+     */
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            get: static function (mixed $value) {
+                /** @var string $value */
+                return strtolower($value);
+            },
+            set: static function (mixed $value) {
+                /** @var string $value */
+                return strtolower($value);
+            },
+        );
     }
 }
