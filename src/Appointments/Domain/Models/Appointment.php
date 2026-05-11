@@ -6,6 +6,7 @@ namespace Lightit\Appointments\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Lightit\Appointments\Domain\Enums\AppointmentStatus;
 use Lightit\Clinics\Domain\Models\Clinic;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
@@ -17,7 +18,7 @@ use Lightit\Patients\Domain\Models\Patient;
  * @property int                     $clinic_id
  * @property \Carbon\CarbonImmutable $starts_at
  * @property \Carbon\CarbonImmutable $ends_at
- * @property string                  $status
+ * @property AppointmentStatus       $status
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
  * @property-read Clinic $clinic
@@ -45,6 +46,7 @@ class Appointment extends Model
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'status' => AppointmentStatus::class,
     ];
 
     #[\Override]
