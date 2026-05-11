@@ -41,8 +41,6 @@ class AppointmentFactory extends Factory
      */
     public function cancelled(): static
     {
-        return $this->state(fn (array $attributes): array => [
-            'status' => AppointmentStatus::Cancelled,
-        ]);
+        return $this->set('status', AppointmentStatus::Cancelled);
     }
 }
