@@ -31,6 +31,10 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
  *
+ * @property string|null $remember_token
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereRememberToken($value)
+ *
  * @mixin \Eloquent
  */
 class Patient extends JWTAuthenticatable

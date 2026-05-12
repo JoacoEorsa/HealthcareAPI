@@ -44,7 +44,7 @@ return [
         ],
         'api' => [
         'driver' => 'jwt',
-        'provider' => 'users',
+        'provider' => 'patients',
     ],
     ],
 
@@ -70,6 +70,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', \Lightit\Users\Domain\Models\User::class),
         ],
+        'patients' => [
+            'driver' => 'eloquent',
+            'model' => \Lightit\Patients\Domain\Models\Patient::class,
+    ],
 
         // 'users' => [
         //     'driver' => 'database',
