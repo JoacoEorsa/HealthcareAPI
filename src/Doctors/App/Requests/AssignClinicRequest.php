@@ -18,18 +18,16 @@ class AssignClinicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::CLINIC_IDS => ['required', 'array'],
-            self::CLINIC_IDS . '.*' => ['integer', Rule::exists(Clinic::class, 'id')],
+            self::CLINIC_IDS => ['required', 'array', Rule::exists(Clinic::class, 'id')],
+            self::CLINIC_IDS . '.*' => [Rule::numeric()->integer()],
         ];
     }
 
     /**
-     * @return array<int, int>
+     * @return array<int, mixed>
      */
     public function getClinicIds(): array
     {
-        return array_values(
-            array_map(fn (mixed $id): int => is_numeric($id) ? (int) $id : 0, $this->array(self::CLINIC_IDS))
-        );
+        return $this->array(self::CLINIC_IDS);
     }
 }

@@ -13,9 +13,8 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @property int                     $id
  * @property string                  $first_name
  * @property string                  $last_name
- * @property mixed|null              $email
+ * @property string                  $email
  * @property string                  $password
- * @property string|null             $remember_token
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
@@ -43,7 +42,6 @@ class Patient extends JWTAuthenticatable
     #[\Override]
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     protected function casts(): array

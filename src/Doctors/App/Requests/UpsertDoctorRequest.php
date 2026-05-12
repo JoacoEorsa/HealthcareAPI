@@ -9,9 +9,9 @@ use Lightit\Doctors\Domain\DataTransferObjects\DoctorDto;
 
 class UpsertDoctorRequest extends FormRequest
 {
-    public const string FIRSTNAME = 'first_name';
+    public const string FIRST_NAME = 'first_name';
 
-    public const string LASTNAME = 'last_name';
+    public const string LAST_NAME = 'last_name';
 
     /**
      * @return array<string, mixed>
@@ -19,16 +19,16 @@ class UpsertDoctorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::FIRSTNAME => ['required', 'string', 'min:4', 'max:80'],
-            self::LASTNAME => ['required', 'string', 'min:4', 'max:80', ],
+            self::FIRST_NAME => ['required', 'string', 'min:4', 'max:80'],
+            self::LAST_NAME => ['required', 'string', 'min:4', 'max:80', ],
         ];
     }
 
     public function toDto(): DoctorDto
     {
         return new DoctorDto(
-            firstName: $this->string(self::FIRSTNAME)->toString(),
-            lastName: $this->string(self::LASTNAME)->toString(),
+            firstName: $this->string(self::FIRST_NAME)->toString(),
+            lastName: $this->string(self::LAST_NAME)->toString(),
         );
     }
 }

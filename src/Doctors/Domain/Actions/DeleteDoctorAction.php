@@ -12,6 +12,6 @@ class DeleteDoctorAction
     {
         $doctor->clinics()->detach();
 
-        $doctor->delete();
+        $doctor->deleteOrFail();
     }
 }

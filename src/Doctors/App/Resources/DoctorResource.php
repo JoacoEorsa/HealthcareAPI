@@ -22,10 +22,10 @@ class DoctorResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'clinics' => $this->clinics->map(fn (Clinic $clinic): array => [
+            'clinics' => $this->whenLoaded('clinics', fn () => $this->clinics->map(fn (Clinic $clinic): array => [
                 'id' => $clinic->id,
                 'name' => $clinic->name,
-]),
+            ])),
         ];
     }
 }
