@@ -13,7 +13,7 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @property int                     $id
  * @property string                  $first_name
  * @property string                  $last_name
- * @property string                  $email
+ * @property mixed|null              $email
  * @property string                  $password
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
@@ -29,7 +29,6 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
  *
  * @mixin \Eloquent

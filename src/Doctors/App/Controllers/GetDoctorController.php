@@ -6,6 +6,7 @@ namespace Lightit\Doctors\App\Controllers;
 
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\JsonResponse;
 use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Models\Doctor;
@@ -20,7 +21,7 @@ final readonly class GetDoctorController
     )]
     public function __invoke(Doctor $doctor): JsonResponse
     {
-        $doctor->load('clinics');
+        $doctor->load(['clinics' => fn (BelongsToMany $query) => $query->wherePivotNull('ended_at')]);
 
         return DoctorResource::make($doctor)
             ->response();

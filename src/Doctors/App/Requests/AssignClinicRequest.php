@@ -24,10 +24,11 @@ class AssignClinicRequest extends FormRequest
     }
 
     /**
-     * @return array<int, mixed>
+     * @return array<int, int>
      */
     public function getClinicIds(): array
     {
+        /** @var array<int, int> */
         return $this->array(self::CLINIC_IDS);
     }
 }
