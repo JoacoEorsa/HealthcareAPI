@@ -7,6 +7,7 @@ namespace Lightit\Clinics\App\Controllers;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Response;
+use Lightit\Clinics\Domain\Actions\DeleteClinicAction;
 use Lightit\Clinics\Domain\Models\Clinic;
 
 #[Group('Clinic')]
@@ -17,9 +18,9 @@ final readonly class DeleteClinicController
         title: 'Delete a clinic',
         description: 'Deletes a clinic by its ID.'
     )]
-    public function __invoke(Clinic $clinic): Response
+    public function __invoke(Clinic $clinic, DeleteClinicAction $deleteClinicAction): Response
     {
-        $clinic->delete();
+        $deleteClinicAction->execute($clinic);
 
         return response()->noContent();
     }
