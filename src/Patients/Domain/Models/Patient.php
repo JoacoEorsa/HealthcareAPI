@@ -13,7 +13,7 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @property int                     $id
  * @property string                  $first_name
  * @property string                  $last_name
- * @property string                  $email
+ * @property mixed|null              $email
  * @property string                  $password
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
