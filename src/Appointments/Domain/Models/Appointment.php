@@ -44,8 +44,8 @@ class Appointment extends Model
 {
     #[\Override]
     protected $casts = [
-        'starts_at' => 'datetime',
-        'ends_at' => 'datetime',
+        'starts_at' => 'immutable_datetime',
+        'ends_at' => 'immutable_datetime',
         'status' => AppointmentStatus::class,
     ];
 

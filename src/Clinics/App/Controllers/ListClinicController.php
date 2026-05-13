@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lightit\Clinics\App\Controllers;
+
+use Dedoc\Scramble\Attributes\Endpoint;
+use Dedoc\Scramble\Attributes\Group;
+use Illuminate\Http\JsonResponse;
+use Lightit\Clinics\App\Resources\ClinicResource;
+use Lightit\Clinics\Domain\Actions\ListClinicAction;
+
+#[Group('Clinic')]
+final readonly class ListClinicController
+{
+    #[Endpoint(
+        operationId: 'listClinic',
+        title: 'List clinic',
+        description: 'Retrieves a list of clinics.'
+    )]
+    public function __invoke(
+        ListClinicAction $action,
+    ): JsonResponse {
+        $clinics = $action->execute();
+
+        return ClinicResource::collection($clinics)
+            ->response();
+    }
+}

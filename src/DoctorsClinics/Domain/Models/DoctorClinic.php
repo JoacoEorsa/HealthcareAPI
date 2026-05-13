@@ -7,12 +7,12 @@ namespace Lightit\DoctorsClinics\Domain\Models;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * @property int                     $id
- * @property int                     $doctor_id
- * @property int                     $clinic_id
- * @property \Carbon\CarbonImmutable $created_at
- * @property \Carbon\CarbonImmutable $updated_at
- * @property string|null             $ended_at
+ * @property int                          $id
+ * @property int                          $doctor_id
+ * @property int                          $clinic_id
+ * @property \Carbon\CarbonImmutable      $created_at
+ * @property \Carbon\CarbonImmutable      $updated_at
+ * @property \Carbon\CarbonImmutable|null $ended_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DoctorClinic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DoctorClinic newQuery()
@@ -33,7 +33,7 @@ class DoctorClinic extends Pivot
 
     #[\Override]
     protected $casts = [
-        'ends_at' => 'datetime',
+        'ended_at' => 'datetime',
     ];
 
     public function isActive(): bool
