@@ -17,11 +17,10 @@ class AssignClinicAction
         $clinicIdsToRemove = array_diff($currentClinicIds, $clinicIds);
         $clinicIdsToAdd = array_diff($clinicIds, $currentClinicIds);
 
-        foreach ($clinicIdsToRemove as $clinicId) {
-            $doctor->clinics()->updateExistingPivot($clinicId, [
-                'ended_at' => now(),
-            ]);
-        }
+        $doctor->clinics()->newPivotStatement()
+            ->where('doctor_id', $doctor->id)
+            ->whereIn('clinic_id', $clinicIdsToRemove)
+            ->update(['ended_at' => now()]);
 
         $doctor->clinics()->attach($clinicIdsToAdd);
 
