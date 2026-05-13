@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Lightit\Doctors\Domain\DataTransferObjects\DoctorDto;
 use Lightit\Doctors\Domain\Models\Doctor;
 
-class UpdateDoctorAction
+class UpsertDoctorAction
 {
-    public function execute(Doctor $doctor, DoctorDto $doctorDto): Doctor
+    public function execute(DoctorDto $doctorDto, Doctor|null $doctor = null): Doctor
     {
+        $doctor = $doctor ?? new Doctor();
         $doctor->first_name = $doctorDto->firstName;
         $doctor->last_name = $doctorDto->lastName;
 

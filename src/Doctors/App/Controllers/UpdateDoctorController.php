@@ -9,7 +9,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Lightit\Doctors\App\Requests\UpsertDoctorRequest;
 use Lightit\Doctors\App\Resources\DoctorResource;
-use Lightit\Doctors\Domain\Actions\UpdateDoctorAction;
+use Lightit\Doctors\Domain\Actions\UpsertDoctorAction;
 use Lightit\Doctors\Domain\Models\Doctor;
 
 #[Group('Doctor')]
@@ -23,9 +23,9 @@ final readonly class UpdateDoctorController
     public function __invoke(
         Doctor $doctor,
         UpsertDoctorRequest $request,
-        UpdateDoctorAction $updateDoctorAction,
+        UpsertDoctorAction $updateDoctorAction,
     ): JsonResponse {
-        $doctor = $updateDoctorAction->execute($doctor, $request->toDto());
+        $doctor = $updateDoctorAction->execute($request->toDto(), $doctor);
 
         return DoctorResource::make($doctor)
             ->response();
