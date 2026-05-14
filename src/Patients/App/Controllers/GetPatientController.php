@@ -11,7 +11,7 @@ use Lightit\Patients\App\Resources\PatientResource;
 use Lightit\Patients\Domain\Models\Patient;
 
 #[Group('Patients')]
-final readonly class GetPatientsController
+final readonly class GetPatientController
 {
     #[Endpoint(
         operationId: 'getPatient',
