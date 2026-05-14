@@ -12,7 +12,7 @@ use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Clinics\Domain\Actions\UpsertClinicAction;
 use Lightit\Clinics\Domain\Models\Clinic;
 
-#[Group('Clinic')]
+#[Group('Clinics')]
 final readonly class UpdateClinicController
 {
     #[Endpoint(

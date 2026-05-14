@@ -12,7 +12,7 @@ use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Actions\AssignClinicAction;
 use Lightit\Doctors\Domain\Models\Doctor;
 
-#[Group('Doctor')]
+#[Group('Doctors')]
 final readonly class AssignClinicController
 {
     #[Endpoint(

@@ -12,7 +12,7 @@ use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Actions\UpsertDoctorAction;
 use Lightit\Doctors\Domain\Models\Doctor;
 
-#[Group('Doctor')]
+#[Group('Doctors')]
 final readonly class UpdateDoctorController
 {
     #[Endpoint(

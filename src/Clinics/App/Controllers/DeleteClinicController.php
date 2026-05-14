@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use Lightit\Clinics\Domain\Actions\DeleteClinicAction;
 use Lightit\Clinics\Domain\Models\Clinic;
 
-#[Group('Clinic')]
+#[Group('Clinics')]
 final readonly class DeleteClinicController
 {
     #[Endpoint(
