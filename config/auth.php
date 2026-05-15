@@ -68,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', \Lightit\Patients\Domain\Models\Patient::class),
+            'model' => env('AUTH_MODEL', \Lightit\Users\Domain\Models\User::class),
         ],
     ],
 
