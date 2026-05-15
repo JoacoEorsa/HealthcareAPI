@@ -21,9 +21,9 @@ use Lightit\Patients\Domain\Models\Patient;
  * @property AppointmentStatus       $status
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
- * @property-read Clinic $clinic
- * @property-read Doctor $doctor
- * @property-read Patient $patient
+ * @property-read Clinic|null $clinic
+ * @property-read Doctor|null $doctor
+ * @property-read Patient|null $patient
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newQuery()

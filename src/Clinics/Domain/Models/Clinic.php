@@ -27,13 +27,14 @@ use Lightit\DoctorsClinics\Domain\Models\DoctorClinic;
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic withoutTrashed()
  *
