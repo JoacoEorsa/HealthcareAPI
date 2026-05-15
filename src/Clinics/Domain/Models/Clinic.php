@@ -7,16 +7,18 @@ namespace Lightit\Clinics\Domain\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\DoctorsClinics\Domain\Models\DoctorClinic;
 
 /**
- * @property int                     $id
- * @property string                  $name
- * @property string                  $address
- * @property \Carbon\CarbonImmutable $created_at
- * @property \Carbon\CarbonImmutable $updated_at
+ * @property int                          $id
+ * @property string                       $name
+ * @property string                       $address
+ * @property \Carbon\CarbonImmutable      $created_at
+ * @property \Carbon\CarbonImmutable      $updated_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
  * @property-read int|null $appointments_count
  * @property-read DoctorClinic|null $pivot
@@ -31,11 +33,16 @@ use Lightit\DoctorsClinics\Domain\Models\DoctorClinic;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Clinic withoutTrashed()
  *
  * @mixin \Eloquent
  */
 class Clinic extends Model
 {
+    use SoftDeletes;
+
     #[\Override]
     protected $guarded = ['id'];
 
