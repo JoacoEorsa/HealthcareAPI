@@ -14,7 +14,7 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @property int                          $id
  * @property string                       $first_name
  * @property string                       $last_name
- * @property string                       $email
+ * @property mixed|null                   $email
  * @property string                       $password
  * @property \Carbon\CarbonImmutable      $created_at
  * @property \Carbon\CarbonImmutable      $updated_at
@@ -24,15 +24,16 @@ use Lightitlabs\Models\JWTAuthenticatable;
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient withoutTrashed()
  *
