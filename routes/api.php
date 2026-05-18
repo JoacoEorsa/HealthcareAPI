@@ -3,6 +3,12 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Lightit\Appointments\App\Controllers\CancelAppointmentController;
+use Lightit\Appointments\App\Controllers\GetAppointmentController;
+use Lightit\Appointments\App\Controllers\ListAppointmentController;
+use Lightit\Appointments\App\Controllers\ListMyAppointmentController;
+use Lightit\Appointments\App\Controllers\StoreAppointmentController;
+use Lightit\Appointments\App\Controllers\UpdateAppointmentController;
 use Lightit\Authentication\App\Controllers\LoginController;
 use Lightit\Authentication\App\Controllers\LogoutController;
 use Lightit\Users\App\Controllers\DeleteUserController;
@@ -116,5 +122,21 @@ Route::prefix('patients')
             Route::put('/', UpdatePatientController::class);
             Route::delete('/', DeletePatientController::class);
         })->whereNumber('patient');
+    });
+
+Route::prefix('appointments')
+    ->group(static function (): void {
+        Route::get('/', ListAppointmentController::class);
+        Route::middleware('auth:api')->group(static function (): void {
+            Route::post('/', StoreAppointmentController::class);
+            Route::get('/me', ListMyAppointmentController::class);
+            Route::prefix('{appointment}')->group(static function (): void {
+                Route::put('/', UpdateAppointmentController::class);
+                Route::patch('/', CancelAppointmentController::class);
+            })->whereNumber('appointment');
+        });
+        Route::prefix('{appointment}')->group(static function (): void {
+            Route::get('/', GetAppointmentController::class);
+        })->whereNumber('appointment');
     });
 
