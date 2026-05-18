@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lightit\Appointments\Domain\DataTransferObjects;
+
+use Carbon\CarbonImmutable;
+
+readonly class AppointmentDto
+{
+    public function __construct(
+        public int $doctorId,
+        public int $clinicId,
+        public int $patientId,
+        public CarbonImmutable $startTime,
+        public CarbonImmutable $endTime,
+    ) {
+    }
+}
