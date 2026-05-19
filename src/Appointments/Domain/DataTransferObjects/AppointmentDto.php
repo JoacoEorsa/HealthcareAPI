@@ -11,9 +11,9 @@ readonly class AppointmentDto
     public function __construct(
         public int $doctorId,
         public int $clinicId,
-        public int $patientId,
         public CarbonImmutable $startTime,
         public CarbonImmutable $endTime,
+        public int|null $patientId = null,
     ) {
     }
 }

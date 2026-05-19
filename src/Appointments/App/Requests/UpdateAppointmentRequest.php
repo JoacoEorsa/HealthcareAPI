@@ -6,7 +6,7 @@ namespace Lightit\Appointments\App\Requests;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
-use Lightit\Appointments\Domain\DataTransferObjects\UpdateAppointmentDto;
+use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 
 class UpdateAppointmentRequest extends FormRequest
 {
@@ -31,9 +31,9 @@ class UpdateAppointmentRequest extends FormRequest
         ];
     }
 
-    public function toDto(): UpdateAppointmentDto
+    public function toDto(): AppointmentDto
     {
-        return new UpdateAppointmentDto(
+        return new AppointmentDto(
             doctorId: $this->integer(self::DOCTOR_ID),
             clinicId: $this->integer(self::CLINIC_ID),
             startTime: CarbonImmutable::parse($this->string(self::STARTS_AT)->toString()),

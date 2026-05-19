@@ -9,7 +9,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Lightit\Appointments\App\Requests\StoreAppointmentRequest;
 use Lightit\Appointments\App\Resources\AppointmentResource;
-use Lightit\Appointments\Domain\Actions\StoreAppointmentAction;
+use Lightit\Appointments\Domain\Actions\UpsertAppointmentAction;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
 
@@ -23,14 +23,14 @@ final readonly class StoreAppointmentController
     )]
     public function __invoke(
         StoreAppointmentRequest $storeAppointmentRequest,
-        StoreAppointmentAction $storeAppointmentAction,
+        UpsertAppointmentAction $upsertAppointmentAction,
     ): JsonResponse {
         $doctor = Doctor::query()->findOrFail($storeAppointmentRequest->integer(StoreAppointmentRequest::DOCTOR_ID));
 
         /** @var Patient $patient */
         $patient = $storeAppointmentRequest->user();
 
-        $appointment = $storeAppointmentAction->execute($storeAppointmentRequest->toDto(), $doctor, $patient);
+        $appointment = $upsertAppointmentAction->execute($storeAppointmentRequest->toDto(), $doctor, $patient);
 
         return AppointmentResource::make($appointment)
             ->response()

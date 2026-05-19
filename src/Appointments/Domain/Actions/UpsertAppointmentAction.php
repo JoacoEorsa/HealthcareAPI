@@ -12,24 +12,33 @@ use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
 use Lightit\Shared\App\Exceptions\Http\InvalidActionException;
 
-class StoreAppointmentAction
+class UpsertAppointmentAction
 {
-    public function execute(AppointmentDto $appointmentDto, Doctor $doctor, Patient $patient): Appointment
-    {
+    public function execute(
+        AppointmentDto $appointmentDto,
+        Doctor $doctor,
+        Patient $patient,
+        Appointment|null $appointment = null,
+    ): Appointment {
         $this->isDoctorAssignedToClinic($doctor, $appointmentDto);
 
-        $this->hasOverlappingAppointments($doctor->appointments(), $appointmentDto);
+        $this->hasOverlappingAppointments($doctor->appointments(), $appointmentDto, $appointment?->id);
 
-        $this->hasOverlappingAppointments($patient->appointments(), $appointmentDto);
+        $this->hasOverlappingAppointments($patient->appointments(), $appointmentDto, $appointment?->id);
 
-        $appointment = new Appointment();
+        if (! $appointment instanceof Appointment) {
+            $appointment = new Appointment();
+
+            /** @var int $patientId */
+            $patientId = $appointmentDto->patientId;
+            $appointment->patient_id = $patientId;
+            $appointment->status = AppointmentStatus::Scheduled;
+        }
 
         $appointment->doctor_id = $appointmentDto->doctorId;
         $appointment->clinic_id = $appointmentDto->clinicId;
-        $appointment->patient_id = $appointmentDto->patientId;
         $appointment->starts_at = $appointmentDto->startTime;
         $appointment->ends_at = $appointmentDto->endTime;
-        $appointment->status = AppointmentStatus::Scheduled;
 
         $appointment->saveOrFail();
 
@@ -50,9 +59,13 @@ class StoreAppointmentAction
     /**
      * @param HasMany<Appointment, Doctor>|HasMany<Appointment, Patient> $appointments
     */
-    private function hasOverlappingAppointments(HasMany $appointments, AppointmentDto $appointmentDto): void
-    {
+    private function hasOverlappingAppointments(
+        HasMany $appointments,
+        AppointmentDto $appointmentDto,
+        int|null $appointmentId = null,
+    ): void {
         if ($appointments
+            ->when($appointmentId !== null, fn ($query) => $query->where('id', '!=', $appointmentId))
             ->where('status', AppointmentStatus::Scheduled)
             ->where('ends_at', '>', $appointmentDto->startTime)
             ->where('starts_at', '<', $appointmentDto->endTime)
