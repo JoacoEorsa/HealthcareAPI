@@ -43,9 +43,9 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-        'driver' => 'jwt',
-        'provider' => 'users',
-    ],
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -70,11 +70,6 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', \Lightit\Users\Domain\Models\User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

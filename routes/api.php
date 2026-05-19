@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Route;
+use Lightit\Authentication\App\Controllers\LoginController;
+use Lightit\Authentication\App\Controllers\LogoutController;
 use Lightit\Users\App\Controllers\DeleteUserController;
 use Lightit\Users\App\Controllers\GetUserController;
 use Lightit\Users\App\Controllers\ListUserController;
@@ -20,6 +21,7 @@ use Lightit\Doctors\App\Controllers\ListDoctorController;
 use Lightit\Doctors\App\Controllers\StoreDoctorController;
 use Lightit\Doctors\App\Controllers\UpdateDoctorController;
 use Lightit\Doctors\App\Controllers\AssignClinicController;
+use Lightit\Patients\App\Controllers\GetMeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +35,14 @@ use Lightit\Doctors\App\Controllers\AssignClinicController;
 */
 
 Route::middleware('auth:api')
-    ->get('/me', fn(
-        #[CurrentUser] $user
-    ) => response()->json([
-        'data' => $user,
-    ]));
+    ->get('/me', GetMeController::class);
+
+Route::prefix('auth')
+    ->group(static function (): void{
+        Route::post('/login', LoginController::class);
+        Route::middleware('auth:api')
+            ->post('/logout', LogoutController::class);
+    });
 
 /*
 |--------------------------------------------------------------------------
