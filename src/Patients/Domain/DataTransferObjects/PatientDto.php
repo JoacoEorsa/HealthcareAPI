@@ -13,7 +13,7 @@ readonly class PatientDto
         public string $lastName,
         public string $email,
         #[SensitiveParameter]
-        public string $password,
+        public string|null $password,
     ) {
     }
 }

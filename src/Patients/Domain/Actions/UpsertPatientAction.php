@@ -7,16 +7,21 @@ namespace Lightit\Patients\Domain\Actions;
 use Lightit\Patients\Domain\DataTransferObjects\PatientDto;
 use Lightit\Patients\Domain\Models\Patient;
 
-class StorePatientAction
+class UpsertPatientAction
 {
-    public function execute(PatientDto $patientDto): Patient
+    public function execute(PatientDto $patientDto, Patient|null $patient = null): Patient
     {
-        $patient = new Patient();
+        if (! $patient instanceof Patient) {
+            $patient = new Patient();
+
+            /** @var string $password */
+            $password = $patientDto->password;
+            $patient->password = $password;
+        }
 
         $patient->first_name = $patientDto->firstName;
         $patient->last_name = $patientDto->lastName;
         $patient->email = $patientDto->email;
-        $patient->password = $patientDto->password;
 
         $patient->saveOrFail();
 

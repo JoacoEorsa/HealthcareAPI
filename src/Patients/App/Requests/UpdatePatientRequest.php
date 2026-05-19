@@ -8,7 +8,7 @@ use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Email;
-use Lightit\Patients\Domain\DataTransferObjects\UpdatePatientDto;
+use Lightit\Patients\Domain\DataTransferObjects\PatientDto;
 use Lightit\Patients\Domain\Models\Patient;
 
 class UpdatePatientRequest extends FormRequest
@@ -36,12 +36,13 @@ class UpdatePatientRequest extends FormRequest
         ];
     }
 
-    public function toDto(): UpdatePatientDto
+    public function toDto(): PatientDto
     {
-        return new UpdatePatientDto(
+        return new PatientDto(
             firstName: $this->string(self::FIRST_NAME)->toString(),
             lastName: $this->string(self::LAST_NAME)->toString(),
             email: $this->string(self::EMAIL)->toString(),
+            password: null,
         );
     }
 }
