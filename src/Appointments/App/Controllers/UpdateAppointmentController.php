@@ -9,9 +9,10 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Lightit\Appointments\App\Requests\UpdateAppointmentRequest;
 use Lightit\Appointments\App\Resources\AppointmentResource;
-use Lightit\Appointments\Domain\Actions\UpdateAppointmentAction;
+use Lightit\Appointments\Domain\Actions\UpsertAppointmentAction;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
+use Lightit\Patients\Domain\Models\Patient;
 
 #[Group('Appointments')]
 final readonly class UpdateAppointmentController
@@ -24,10 +25,19 @@ final readonly class UpdateAppointmentController
     public function __invoke(
         UpdateAppointmentRequest $updateAppointmentRequest,
         Appointment $appointment,
-        UpdateAppointmentAction $updateAppointmentAction,
+        UpsertAppointmentAction $upsertAppointmentAction,
     ): JsonResponse {
         $doctor = Doctor::query()->findOrFail($updateAppointmentRequest->integer(UpdateAppointmentRequest::DOCTOR_ID));
-        $appointment = $updateAppointmentAction->execute($updateAppointmentRequest->toDto(), $appointment, $doctor);
+
+        /** @var Patient $patient */
+        $patient = $updateAppointmentRequest->user();
+
+        $appointment = $upsertAppointmentAction->execute(
+            $updateAppointmentRequest->toDto(),
+            $doctor,
+            $patient,
+            $appointment
+        );
 
         return AppointmentResource::make($appointment)
             ->response();
