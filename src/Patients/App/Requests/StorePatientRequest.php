@@ -33,7 +33,7 @@ class StorePatientRequest extends FormRequest
                 'required',
                 'max:100',
                 Email::default(),
-                Rule::unique(Patient::class, 'email'),
+                Rule::unique(Patient::class),
             ],
             self::PASSWORD => [
                 'required',
