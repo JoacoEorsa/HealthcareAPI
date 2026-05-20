@@ -11,7 +11,7 @@ use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Actions\GetDoctorAction;
 use Lightit\Doctors\Domain\Models\Doctor;
 
-#[Group('Doctor')]
+#[Group('Doctors')]
 final readonly class GetDoctorController
 {
     #[Endpoint(

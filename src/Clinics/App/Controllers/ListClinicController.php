@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Clinics\Domain\Actions\ListClinicAction;
 
-#[Group('Clinic')]
+#[Group('Clinics')]
 final readonly class ListClinicController
 {
     #[Endpoint(

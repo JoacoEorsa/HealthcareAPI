@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Actions\ListDoctorAction;
 
-#[Group('Doctor')]
+#[Group('Doctors')]
 final readonly class ListDoctorController
 {
     #[Endpoint(

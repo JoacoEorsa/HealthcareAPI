@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Clinics\Domain\Models\Clinic;
 
-#[Group('Clinic')]
+#[Group('Clinics')]
 final readonly class GetClinicController
 {
     #[Endpoint(
@@ -21,7 +21,7 @@ final readonly class GetClinicController
     public function __invoke(Clinic $clinic): JsonResponse
     {
         $clinic->loadCount('doctors');
-        
+
         return ClinicResource::make($clinic)
             ->response();
     }

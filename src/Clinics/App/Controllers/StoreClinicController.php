@@ -11,7 +11,7 @@ use Lightit\Clinics\App\Requests\UpsertClinicRequest;
 use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Clinics\Domain\Actions\UpsertClinicAction;
 
-#[Group('Clinic')]
+#[Group('Clinics')]
 final readonly class StoreClinicController
 {
     #[Endpoint(
