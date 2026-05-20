@@ -7,9 +7,6 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Appointments\Domain\Enums\AppointmentStatus;
-use Database\Factories\DoctorFactory;
-use Database\Factories\ClinicFactory;
-use Database\Factories\PatientFactory;
 
 /**
  * @extends Factory<Appointment>
@@ -25,13 +22,12 @@ class AppointmentFactory extends Factory
      */
     public function definition(): array
     {
-        $startsAt = fake()->dateTimeBetween('now', '+1 month');
         return [
             'doctor_id' => DoctorFactory::new(),
             'clinic_id' => ClinicFactory::new(),
             'patient_id' => PatientFactory::new(),
-            'starts_at' => $startsAt,
-            'ends_at' => (clone $startsAt)->modify('+1 hour'),
+            'starts_at' => now()->addDay(),
+            'ends_at' => now()->addDay()->addHour(),
             'status' => AppointmentStatus::Scheduled,
         ];
     }
