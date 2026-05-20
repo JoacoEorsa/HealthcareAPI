@@ -106,7 +106,7 @@ Route::prefix('doctors')
             Route::delete('/', DeleteDoctorController::class);
             Route::post('/clinics', AssignClinicController::class);
         })->whereNumber('doctor');
-});
+    });
 
 /*
 |--------------------------------------------------------------------------

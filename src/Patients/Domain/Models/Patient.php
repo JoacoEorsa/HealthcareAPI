@@ -41,6 +41,10 @@ use Lightitlabs\Models\JWTAuthenticatable;
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereDeletedAt($value)
  *
+ * @property string|null $deleted_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereDeletedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Patient extends JWTAuthenticatable
