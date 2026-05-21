@@ -16,22 +16,18 @@ class UpsertAppointmentAction
 {
     public function execute(
         AppointmentDto $appointmentDto,
-        Doctor $doctor,
         Patient $patient,
         Appointment|null $appointment = null,
     ): Appointment {
+        $doctor = Doctor::query()->findOrFail($appointmentDto->doctorId);
+
         $this->isDoctorAssignedToClinic($doctor, $appointmentDto);
-
         $this->hasOverlappingAppointments($doctor->appointments(), $appointmentDto, $appointment?->id);
-
         $this->hasOverlappingAppointments($patient->appointments(), $appointmentDto, $appointment?->id);
 
         if (! $appointment instanceof Appointment) {
             $appointment = new Appointment();
-
-            /** @var int $patientId */
-            $patientId = $appointmentDto->patientId;
-            $appointment->patient_id = $patientId;
+            $appointment->patient_id = $patient->id;
             $appointment->status = AppointmentStatus::Scheduled;
         }
 
@@ -65,7 +61,7 @@ class UpsertAppointmentAction
         int|null $appointmentId = null,
     ): void {
         if ($appointments
-            ->when($appointmentId !== null, fn ($query) => $query->where('id', '!=', $appointmentId))
+            ->when($appointmentId !== null, fn ($query) => $query->whereKeyNot($appointmentId))
             ->where('status', AppointmentStatus::Scheduled)
             ->where('ends_at', '>', $appointmentDto->startTime)
             ->where('starts_at', '<', $appointmentDto->endTime)

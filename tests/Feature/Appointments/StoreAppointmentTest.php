@@ -10,6 +10,7 @@ use Database\Factories\DoctorFactory;
 use Database\Factories\PatientFactory;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Tests\RequestFactories\StoreAppointmentRequestFactory;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 
@@ -36,7 +37,7 @@ describe('appointments', function (): void {
         $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $doctor->clinics()->attach($clinic->id);
 
@@ -83,7 +84,7 @@ describe('appointments', function (): void {
             $doctor = DoctorFactory::new()->createOne();
             $clinic = ClinicFactory::new()->createOne();
             $patient = PatientFactory::new()->createOne();
-            $this->actingAs($patient, 'api');
+            actingAs($patient, 'api');
     
             $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
                 'clinic_id' => $clinic->id, ]);
@@ -99,7 +100,7 @@ describe('appointments', function (): void {
         $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
         $patient2 = PatientFactory::new()->createOne();
         $doctor->clinics()->attach($clinic->id);
 
@@ -124,7 +125,7 @@ describe('appointments', function (): void {
         $doctor2->clinics()->attach($clinic->id);
 
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
 
         AppointmentFactory::new()->createOne(['doctor_id' => $doctor2->id,
@@ -151,7 +152,7 @@ describe('appointments', function (): void {
 
     it('cannot create an appointment with invalid data', function (string $field, mixed $value): void {
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = StoreAppointmentRequestFactory::new()->create([$field => $value]);
 
@@ -163,7 +164,7 @@ describe('appointments', function (): void {
     it('cannot create an appointment when the doctor does not exist', function (): void {
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = StoreAppointmentRequestFactory::new()->create([
             'doctor_id' => 9999,
@@ -179,7 +180,7 @@ describe('appointments', function (): void {
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $doctor->clinics()->attach($clinic->id);
 
@@ -210,7 +211,7 @@ describe('appointments', function (): void {
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $doctor->clinics()->attach($clinic->id);
 
@@ -235,7 +236,7 @@ describe('appointments', function (): void {
         $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $doctor->clinics()->attach($clinic->id, ['ended_at' => now()->subDay()]);
 

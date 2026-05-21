@@ -13,7 +13,6 @@ readonly class AppointmentDto
         public int $clinicId,
         public CarbonImmutable $startTime,
         public CarbonImmutable $endTime,
-        public int|null $patientId = null,
     ) {
     }
 }

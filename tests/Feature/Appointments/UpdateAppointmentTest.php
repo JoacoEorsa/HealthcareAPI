@@ -10,6 +10,7 @@ use Database\Factories\DoctorFactory;
 use Database\Factories\PatientFactory;
 use Lightit\Appointments\App\Controllers\UpdateAppointmentController;
 use Tests\RequestFactories\UpdateAppointmentRequestFactory;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\putJson;
 
@@ -43,7 +44,7 @@ describe('appointments', function (): void {
             'patient_id' => $patient->id,
         ]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $newStartsAt = now()->addDays(2);
         $newEndsAt = $newStartsAt->copy()->addHour();
@@ -72,7 +73,7 @@ describe('appointments', function (): void {
     it('cannot update an appointment with invalid data', function (string $field, mixed $value): void {
         $patient = PatientFactory::new()->createOne();
         $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([$field => $value]);
 
@@ -104,7 +105,7 @@ describe('appointments', function (): void {
             'ends_at' => now()->addDay()->addHour(),
         ]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
@@ -141,7 +142,7 @@ describe('appointments', function (): void {
             'ends_at' => now()->addDay()->addHour(),
         ]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
@@ -171,7 +172,7 @@ describe('appointments', function (): void {
             'ends_at' => $endsAt,
         ]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
@@ -191,7 +192,7 @@ describe('appointments', function (): void {
 
         $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
@@ -206,7 +207,7 @@ describe('appointments', function (): void {
         $patient = PatientFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => 9999,
@@ -219,7 +220,7 @@ describe('appointments', function (): void {
 
     it('returns 404 when the appointment is not found', function (): void {
         $patient = PatientFactory::new()->createOne();
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create();
 

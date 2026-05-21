@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Tests\Feature\Appointments;
 
 use Database\Factories\AppointmentFactory;
+use Database\Factories\PatientFactory;
 use Lightit\Appointments\App\Controllers\ListAppointmentController;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
 describe('appointments', function (): void {
     /** @see ListAppointmentController */
     it('can list appointments successfully', function (): void {
+        $patient = PatientFactory::new()->createOne();
+        actingAs($patient, 'api');
+
         AppointmentFactory::new()->count(5)->create();
 
         getJson(url('/api/appointments'))
@@ -19,6 +24,9 @@ describe('appointments', function (): void {
     });
 
     it('returns paginated results', function (): void {
+        $patient = PatientFactory::new()->createOne();
+        actingAs($patient, 'api');
+
         AppointmentFactory::new()->count(3)->create();
 
         getJson(url('/api/appointments'))
@@ -31,6 +39,9 @@ describe('appointments', function (): void {
     });
 
     it('orders results by id desc', function (): void {
+        $patient = PatientFactory::new()->createOne();
+        actingAs($patient, 'api');
+
         $first = AppointmentFactory::new()->createOne();
         $second = AppointmentFactory::new()->createOne();
         $third = AppointmentFactory::new()->createOne();
@@ -42,10 +53,10 @@ describe('appointments', function (): void {
             ->assertJsonPath('data.2.id', $first->id);
     });
 
-    it('is publicly accessible without authentication', function (): void {
+    it('returns 401 when unauthenticated', function (): void {
         AppointmentFactory::new()->createOne();
 
         getJson(url('/api/appointments'))
-            ->assertOk();
+            ->assertUnauthorized();
     });
 });

@@ -7,6 +7,7 @@ namespace Tests\Feature\Appointments;
 use Database\Factories\AppointmentFactory;
 use Database\Factories\PatientFactory;
 use Lightit\Appointments\App\Controllers\ListMyAppointmentController;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
 describe('appointments', function (): void {
@@ -18,14 +19,17 @@ describe('appointments', function (): void {
         AppointmentFactory::new()->count(2)->create(['patient_id' => $patient->id]);
         AppointmentFactory::new()->count(3)->create(['patient_id' => $otherPatient->id]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         $response = getJson(url('/api/appointments/me'))
             ->assertOk()
             ->assertJsonCount(2, 'data');
 
-        $ids = collect($response->json('data'))->pluck('patient.id')->unique()->values()->all();
-        expect($ids)->toEqual([$patient->id]);
+        /** @var list<array{patient: array{id: int}}> $rows */
+        $rows = $response->json('data');
+        foreach ($rows as $row) {
+            expect($row['patient']['id'])->toBe($patient->id);
+        }
     });
 
     it('returns paginated results ordered by id desc', function (): void {
@@ -34,7 +38,7 @@ describe('appointments', function (): void {
         $first = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
         $second = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
 
-        $this->actingAs($patient, 'api');
+        actingAs($patient, 'api');
 
         getJson(url('/api/appointments/me'))
             ->assertOk()
