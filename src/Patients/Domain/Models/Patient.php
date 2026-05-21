@@ -6,17 +6,19 @@ namespace Lightit\Patients\Domain\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightitlabs\Models\JWTAuthenticatable;
 
 /**
- * @property int                     $id
- * @property string                  $first_name
- * @property string                  $last_name
- * @property string                  $email
- * @property string                  $password
- * @property \Carbon\CarbonImmutable $created_at
- * @property \Carbon\CarbonImmutable $updated_at
+ * @property int                          $id
+ * @property string                       $first_name
+ * @property string                       $last_name
+ * @property string                       $email
+ * @property string                       $password
+ * @property \Carbon\CarbonImmutable      $created_at
+ * @property \Carbon\CarbonImmutable      $updated_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
  * @property-read int|null $appointments_count
  *
@@ -30,15 +32,17 @@ use Lightitlabs\Models\JWTAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUpdatedAt($value)
- *
- * @property string|null $deleted_at
- *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient withoutTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient onlyTrashed()
  *
  * @mixin \Eloquent
  */
 class Patient extends JWTAuthenticatable
 {
+    use SoftDeletes;
+
     #[\Override]
     protected $guarded = ['id'];
 
