@@ -8,7 +8,6 @@ use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Lightit\Appointments\App\Resources\AppointmentResource;
-use Lightit\Appointments\Domain\Actions\GetAppointmentAction;
 use Lightit\Appointments\Domain\Models\Appointment;
 
 #[Group('Appointments')]
@@ -19,9 +18,9 @@ final readonly class GetAppointmentController
         title: 'Get a single appointment',
         description: 'Retrieves a appointment by its ID.'
     )]
-    public function __invoke(Appointment $appointment, GetAppointmentAction $getAppointmentAction): JsonResponse
+    public function __invoke(Appointment $appointment): JsonResponse
     {
-        $appointment = $getAppointmentAction->execute($appointment);
+        $appointment->load(['doctor', 'clinic', 'patient']);
 
         return AppointmentResource::make($appointment)
             ->response();

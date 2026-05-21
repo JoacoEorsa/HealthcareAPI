@@ -6,9 +6,10 @@ namespace Lightit\Appointments\App\Requests;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 
-class UpdateAppointmentRequest extends FormRequest
+class UpsertAppointmentRequest extends FormRequest
 {
     public const string DOCTOR_ID = 'doctor_id';
 
@@ -24,10 +25,10 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::DOCTOR_ID => ['required', 'integer'],
-            self::CLINIC_ID => ['required', 'integer'],
-            self::STARTS_AT => ['required', 'date', 'after:now'],
-            self::ENDS_AT => ['required', 'date', 'after:starts_at'],
+            self::DOCTOR_ID => ['required', Rule::numeric()->integer()],
+            self::CLINIC_ID => ['required', Rule::numeric()->integer()],
+            self::STARTS_AT => ['required', Rule::date()->after(now())],
+            self::ENDS_AT => ['required', Rule::date()->after(self::STARTS_AT)],
         ];
     }
 

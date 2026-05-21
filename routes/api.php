@@ -126,18 +126,15 @@ Route::prefix('patients')
     });
 
 Route::prefix('appointments')
+    ->middleware('auth:api')
     ->group(static function (): void {
+        Route::post('/', StoreAppointmentController::class);
         Route::get('/', ListAppointmentController::class);
-        Route::middleware('auth:api')->group(static function (): void {
-            Route::post('/', StoreAppointmentController::class);
-            Route::get('/me', ListMyAppointmentController::class);
-            Route::prefix('{appointment}')->group(static function (): void {
-                Route::put('/', UpdateAppointmentController::class);
-                Route::patch('/', CancelAppointmentController::class);
-            })->whereNumber('appointment');
-        });
+        Route::get('/me', ListMyAppointmentController::class);
         Route::prefix('{appointment}')->group(static function (): void {
             Route::get('/', GetAppointmentController::class);
+            Route::put('/', UpdateAppointmentController::class);
+            Route::patch('/', CancelAppointmentController::class);
         })->whereNumber('appointment');
     });
 
