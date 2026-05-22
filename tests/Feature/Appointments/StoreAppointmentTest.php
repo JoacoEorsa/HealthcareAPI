@@ -107,10 +107,7 @@ describe('appointments', function (): void {
             ->for($doctor)
             ->for($clinic)
             ->for($patient2)
-            ->createOne([
-                'starts_at' => now()->addDay(),
-                'ends_at' => now()->addDay()->addHour(),
-            ]);
+            ->createOne();
 
         $data = StoreAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
@@ -136,10 +133,7 @@ describe('appointments', function (): void {
             ->for($doctor2)
             ->for($clinic)
             ->for($patient)
-            ->createOne([
-                'starts_at' => now()->addDay(),
-                'ends_at' => now()->addDay()->addHour(),
-            ]);
+            ->createOne();
 
         $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id, ]);
@@ -227,10 +221,7 @@ describe('appointments', function (): void {
             ->for($doctor)
             ->for($clinic)
             ->for($otherPatient)
-            ->createOne([
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addHour(),
-        ]);
+            ->createOne();
 
         $data = StoreAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,

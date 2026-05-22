@@ -87,10 +87,11 @@ describe('appointments', function (): void {
         $otherPatient = PatientFactory::new()->createOne();
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $appointment = AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
+        $appointment = AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne([
             'starts_at' => now()->addDays(3),
             'ends_at' => now()->addDays(3)->addHour(),
         ]);
@@ -117,25 +118,25 @@ describe('appointments', function (): void {
     });
 
     it('cannot update to overlap with another patient appointment', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
-        $otherDoctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
         $otherDoctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $appointment = AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
+        $appointment = AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne([
             'starts_at' => now()->addDays(3),
             'ends_at' => now()->addDays(3)->addHour(),
         ]);
 
-        AppointmentFactory::new()->createOne([
-            'doctor_id' => $otherDoctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
+        AppointmentFactory::new()
+            ->for($otherDoctor)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne([
             'starts_at' => now()->addDay(),
             'ends_at' => now()->addDay()->addHour(),
         ]);
@@ -161,13 +162,14 @@ describe('appointments', function (): void {
         $startsAt = now()->addDay();
         $endsAt = $startsAt->copy()->addHour();
 
-        $appointment = AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
-            'starts_at' => $startsAt,
-            'ends_at' => $endsAt,
-        ]);
+        $appointment = AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne([
+                'starts_at' => $startsAt,
+                'ends_at' => $endsAt,
+            ]);
 
         actingAs($patient, 'api');
 
@@ -187,7 +189,9 @@ describe('appointments', function (): void {
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
 
-        $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
+        $appointment = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
 
         actingAs($patient, 'api');
 
@@ -203,7 +207,9 @@ describe('appointments', function (): void {
     it('cannot update when the doctor does not exist', function (): void {
         $patient = PatientFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
-        $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
+        $appointment = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
