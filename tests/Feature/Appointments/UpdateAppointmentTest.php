@@ -33,16 +33,15 @@ dataset('update-validation-rules', [
 describe('appointments', function (): void {
     /** @see UpdateAppointmentController */
     it('can update an appointment successfully', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $appointment = AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
-        ]);
+        $appointment = AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne();
 
         actingAs($patient, 'api');
 
@@ -83,11 +82,10 @@ describe('appointments', function (): void {
     })->with('update-validation-rules');
 
     it('cannot update to overlap with another doctor appointment', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $appointment = AppointmentFactory::new()->createOne([
             'doctor_id' => $doctor->id,
@@ -123,8 +121,8 @@ describe('appointments', function (): void {
         $otherDoctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
-        $otherDoctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
+        $otherDoctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $appointment = AppointmentFactory::new()->createOne([
             'doctor_id' => $doctor->id,
@@ -156,10 +154,9 @@ describe('appointments', function (): void {
     });
 
     it('allows updating an appointment without changing its time slot', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $startsAt = now()->addDay();
         $endsAt = $startsAt->copy()->addHour();

@@ -8,6 +8,7 @@ use Database\Factories\AppointmentFactory;
 use Database\Factories\ClinicFactory;
 use Database\Factories\DoctorFactory;
 use Database\Factories\PatientFactory;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Tests\RequestFactories\StoreAppointmentRequestFactory;
 use function Pest\Laravel\actingAs;
@@ -34,12 +35,11 @@ dataset(name: 'validation-rules', dataset: [
 describe('appointments', function (): void {
     /** @see StoreAppointmentController */
     it(description: 'can create an appointment successfully', closure: function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id, ]);
@@ -55,20 +55,18 @@ describe('appointments', function (): void {
 
         $response
             ->assertCreated()
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'doctor',
-                    'clinic',
-                    'patient',
-                    'starts_at',
-                    'ends_at',
-                    'status',
-                ],
-            ])
-            ->assertJsonPath('data.doctor.id', $doctor->id)
-            ->assertJsonPath('data.clinic.id', $clinic->id)
-            ->assertJsonPath('data.patient.id', $patient->id);
+            ->assertJson(
+                fn (AssertableJson $json): AssertableJson =>
+                $json->has(
+                    'data',
+                    fn (AssertableJson $json): AssertableJson =>
+                $json->hasAll(['id', 'doctor', 'clinic', 'patient', 'starts_at', 'ends_at', 'status'])
+                    ->where('id', $appointment->id)
+                    ->where('doctor.id', $appointment->doctor_id)
+                    ->where('clinic.id', $appointment->clinic_id)
+                    ->where('patient.id', $appointment->patient_id)
+                )
+            );
 
         assertDatabaseHas('appointments', [
             'doctor_id' => $data['doctor_id'],
@@ -85,31 +83,39 @@ describe('appointments', function (): void {
             $clinic = ClinicFactory::new()->createOne();
             $patient = PatientFactory::new()->createOne();
             actingAs($patient, 'api');
-    
-            $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
-                'clinic_id' => $clinic->id, ]);
-    
+
+            $data = StoreAppointmentRequestFactory::new()->create([
+                'doctor_id' => $doctor->id,
+                'clinic_id' => $clinic->id,
+                ]);
+
             $response = postJson(url('/api/appointments'), $data);
-    
+
             $response
                 ->assertUnprocessable();
         }
     );
 
     it(description: 'cannot create an overlapping appointment for a doctor', closure: function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
         $patient2 = PatientFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        AppointmentFactory::new()->createOne(['doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id, 'patient_id' => $patient2->id,
-            'starts_at' => now()->addDay(), 'ends_at' => now()->addDay()->addHour()]);
+        AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($patient2)
+            ->createOne([
+                'starts_at' => now()->addDay(),
+                'ends_at' => now()->addDay()->addHour(),
+            ]);
 
-        $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id, ]);
+        $data = StoreAppointmentRequestFactory::new()->create([
+            'doctor_id' => $doctor->id,
+            'clinic_id' => $clinic->id,
+            ]);
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -118,19 +124,22 @@ describe('appointments', function (): void {
     });
 
     it(description: 'cannot create an overlapping appointment for a patient', closure: function (): void {
-        $doctor = DoctorFactory::new()->createOne();
-        $doctor2 = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic->id);
-        $doctor2->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
+        $doctor2 = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $patient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
 
-        AppointmentFactory::new()->createOne(['doctor_id' => $doctor2->id,
-            'clinic_id' => $clinic->id, 'patient_id' => $patient->id,
-            'starts_at' => now()->addDay(), 'ends_at' => now()->addDay()->addHour()]);
+        AppointmentFactory::new()
+            ->for($doctor2)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne([
+                'starts_at' => now()->addDay(),
+                'ends_at' => now()->addDay()->addHour(),
+            ]);
 
         $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id, ]);
@@ -176,21 +185,21 @@ describe('appointments', function (): void {
     });
 
     it('allows back-to-back non-overlapping appointments for the same doctor', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $startsAt = now()->addDay();
         $endsAt = $startsAt->copy()->addHour();
 
-        AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $otherPatient->id,
+        AppointmentFactory::new()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($otherPatient)
+            ->createOne([
             'starts_at' => $startsAt,
             'ends_at' => $endsAt,
         ]);
@@ -207,18 +216,18 @@ describe('appointments', function (): void {
     });
 
     it('ignores cancelled appointments when checking for overlap', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
-        $doctor->clinics()->attach($clinic->id);
+        $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        AppointmentFactory::new()->cancelled()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $otherPatient->id,
+        AppointmentFactory::new()->cancelled()
+            ->for($doctor)
+            ->for($clinic)
+            ->for($otherPatient)
+            ->createOne([
             'starts_at' => now()->addDay(),
             'ends_at' => now()->addDay()->addHour(),
         ]);
@@ -233,12 +242,11 @@ describe('appointments', function (): void {
     });
 
     it('cannot create an appointment when the doctor clinic assignment has ended', function (): void {
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
         $patient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
-        $doctor->clinics()->attach($clinic->id, ['ended_at' => now()->subDay()]);
+        $doctor = DoctorFactory::new()->withExpiredClinicAssigment($clinic)->createOne();
 
         $data = StoreAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,

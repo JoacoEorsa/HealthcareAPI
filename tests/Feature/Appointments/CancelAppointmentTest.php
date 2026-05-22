@@ -16,7 +16,10 @@ describe('appointments', function (): void {
     /** @see CancelAppointmentController */
     it('cancels an appointment and returns no content', function (): void {
         $patient = PatientFactory::new()->createOne();
-        $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
+        $appointment = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
+
         actingAs($patient, 'api');
 
         patchJson(url("/api/appointments/$appointment->id"))
@@ -30,7 +33,10 @@ describe('appointments', function (): void {
 
     it('can cancel an already-cancelled appointment', function (): void {
         $patient = PatientFactory::new()->createOne();
-        $appointment = AppointmentFactory::new()->cancelled()->createOne(['patient_id' => $patient->id]);
+        $appointment = AppointmentFactory::new()
+            ->cancelled()
+            ->for($patient)
+            ->createOne();
         actingAs($patient, 'api');
 
         patchJson(url("/api/appointments/$appointment->id"))

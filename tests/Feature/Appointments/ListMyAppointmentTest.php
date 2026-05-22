@@ -16,8 +16,12 @@ describe('appointments', function (): void {
         $patient = PatientFactory::new()->createOne();
         $otherPatient = PatientFactory::new()->createOne();
 
-        AppointmentFactory::new()->count(2)->create(['patient_id' => $patient->id]);
-        AppointmentFactory::new()->count(3)->create(['patient_id' => $otherPatient->id]);
+        AppointmentFactory::new()->count(2)
+            ->for($patient)
+            ->create();
+        AppointmentFactory::new()->count(3)
+            ->for($otherPatient)
+            ->create();
 
         actingAs($patient, 'api');
 
@@ -35,8 +39,12 @@ describe('appointments', function (): void {
     it('returns paginated results ordered by id desc', function (): void {
         $patient = PatientFactory::new()->createOne();
 
-        $first = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
-        $second = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
+        $first = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
+        $second = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
 
         actingAs($patient, 'api');
 
