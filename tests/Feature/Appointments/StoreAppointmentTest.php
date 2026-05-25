@@ -41,8 +41,11 @@ describe('appointments', function (): void {
 
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id, ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->create([
+                'doctor_id' => $doctor->id,
+                'clinic_id' => $clinic->id,
+                ]);
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -84,7 +87,8 @@ describe('appointments', function (): void {
             $patient = PatientFactory::new()->createOne();
             actingAs($patient, 'api');
 
-            $data = StoreAppointmentRequestFactory::new()->create([
+            $data = StoreAppointmentRequestFactory::new()
+                ->create([
                 'doctor_id' => $doctor->id,
                 'clinic_id' => $clinic->id,
                 ]);
@@ -135,8 +139,11 @@ describe('appointments', function (): void {
             ->for($patient)
             ->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create(['doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id, ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->create([
+                'doctor_id' => $doctor->id,
+                'clinic_id' => $clinic->id,
+                ]);
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -186,23 +193,17 @@ describe('appointments', function (): void {
 
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $startsAt = now()->addDay();
-        $endsAt = $startsAt->copy()->addHour();
-
         AppointmentFactory::new()
             ->for($doctor)
             ->for($clinic)
             ->for($otherPatient)
-            ->createOne([
-            'starts_at' => $startsAt,
-            'ends_at' => $endsAt,
-        ]);
+            ->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create([
+        $data = StoreAppointmentRequestFactory::new()
+            ->aWeekFromNow()
+            ->create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id,
-            'starts_at' => $endsAt->toDateTimeString(),
-            'ends_at' => $endsAt->copy()->addHour()->toDateTimeString(),
         ]);
 
         postJson(url('/api/appointments'), $data)

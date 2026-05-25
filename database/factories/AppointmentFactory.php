@@ -39,4 +39,10 @@ class AppointmentFactory extends Factory
     {
         return $this->set('status', AppointmentStatus::Cancelled);
     }
+
+    public function aWeekFromNow(): static{
+        return $this
+            ->set('starts_at', now()->addWeek())
+            ->set('ends_at', now()->addWeek()->addHour());
+    }
 }

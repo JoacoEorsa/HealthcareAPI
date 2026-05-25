@@ -45,14 +45,11 @@ describe('appointments', function (): void {
 
         actingAs($patient, 'api');
 
-        $newStartsAt = now()->addDays(2);
-        $newEndsAt = $newStartsAt->copy()->addHour();
-
-        $data = UpdateAppointmentRequestFactory::new()->create([
+        $data = UpdateAppointmentRequestFactory::new()
+            ->aWeekFromNow()
+            ->create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id,
-            'starts_at' => $newStartsAt->toDateTimeString(),
-            'ends_at' => $newEndsAt->toDateTimeString(),
         ]);
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -71,7 +68,9 @@ describe('appointments', function (): void {
 
     it('cannot update an appointment with invalid data', function (string $field, mixed $value): void {
         $patient = PatientFactory::new()->createOne();
-        $appointment = AppointmentFactory::new()->createOne(['patient_id' => $patient->id]);
+        $appointment = AppointmentFactory::new()
+            ->for($patient)
+            ->createOne();
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([$field => $value]);
@@ -88,29 +87,23 @@ describe('appointments', function (): void {
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $appointment = AppointmentFactory::new()
+            ->aWeekFromNow()
             ->for($doctor)
             ->for($clinic)
             ->for($patient)
-            ->createOne([
-            'starts_at' => now()->addDays(3),
-            'ends_at' => now()->addDays(3)->addHour(),
-        ]);
+            ->createOne();
 
-        AppointmentFactory::new()->createOne([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            'patient_id' => $otherPatient->id,
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addHour(),
-        ]);
+        AppointmentFactory::new()
+            ->for($otherPatient)
+            ->for($clinic)
+            ->for($patient)
+            ->createOne();
 
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id,
-            'starts_at' => now()->addDay()->toDateTimeString(),
-            'ends_at' => now()->addDay()->addHour()->toDateTimeString(),
         ]);
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -124,30 +117,23 @@ describe('appointments', function (): void {
         $otherDoctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $appointment = AppointmentFactory::new()
+            ->aWeekFromNow()
             ->for($doctor)
             ->for($clinic)
             ->for($patient)
-            ->createOne([
-            'starts_at' => now()->addDays(3),
-            'ends_at' => now()->addDays(3)->addHour(),
-        ]);
+            ->createOne();
 
         AppointmentFactory::new()
             ->for($otherDoctor)
             ->for($clinic)
             ->for($patient)
-            ->createOne([
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addHour(),
-        ]);
+            ->createOne();
 
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id,
-            'starts_at' => now()->addDay()->toDateTimeString(),
-            'ends_at' => now()->addDay()->addHour()->toDateTimeString(),
         ]);
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -159,25 +145,17 @@ describe('appointments', function (): void {
         $patient = PatientFactory::new()->createOne();
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
-        $startsAt = now()->addDay();
-        $endsAt = $startsAt->copy()->addHour();
-
         $appointment = AppointmentFactory::new()
             ->for($doctor)
             ->for($clinic)
             ->for($patient)
-            ->createOne([
-                'starts_at' => $startsAt,
-                'ends_at' => $endsAt,
-            ]);
+            ->createOne();
 
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()->create([
             'doctor_id' => $doctor->id,
             'clinic_id' => $clinic->id,
-            'starts_at' => $startsAt->toDateTimeString(),
-            'ends_at' => $endsAt->toDateTimeString(),
         ]);
 
         putJson(url("/api/appointments/$appointment->id"), $data)

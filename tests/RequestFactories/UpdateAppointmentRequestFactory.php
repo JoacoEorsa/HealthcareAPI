@@ -17,4 +17,12 @@ class UpdateAppointmentRequestFactory extends RequestFactory
             'ends_at' => now()->addDay()->addHour()->toDateTimeString(),
         ];
     }
+
+    public function aWeekFromNow(): static
+    {
+        return $this->state([
+            'starts_at' => now()->addWeek()->toDateTimeString(),
+            'ends_at' => now()->addWeek()->addHour()->toDateTimeString(),
+        ]);
+    }
 }
