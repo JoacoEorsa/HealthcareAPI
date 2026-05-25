@@ -26,10 +26,16 @@ class UpdateAppointmentRequestFactory extends RequestFactory
         ]);
     }
 
-    public function withDoctorAndClinic(int $doctorId, int $clinicId): static
+    public function withDoctor(int $doctorId): static
     {
         return $this->state([
             'doctor_id' => $doctorId,
+        ]);
+    }
+
+    public function withClinic(int $clinicId): static
+    {
+        return $this->state([
             'clinic_id' => $clinicId,
         ]);
     }

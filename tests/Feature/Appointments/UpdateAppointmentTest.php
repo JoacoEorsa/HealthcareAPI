@@ -46,7 +46,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor($doctor->id)
             ->aWeekFromNow()
             ->create();
 
@@ -100,7 +101,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor($doctor->id)
             ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -129,7 +131,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor($doctor->id)
             ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -150,7 +153,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor($doctor->id)
             ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -169,7 +173,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor($doctor->id)
             ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
@@ -185,7 +190,8 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
-            ->withDoctorAndClinic(999, $clinic->id)
+            ->withClinic($clinic->id)
+            ->withDoctor(999)
             ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
