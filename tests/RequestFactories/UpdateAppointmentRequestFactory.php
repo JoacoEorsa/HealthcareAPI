@@ -25,4 +25,12 @@ class UpdateAppointmentRequestFactory extends RequestFactory
             'ends_at' => now()->addWeek()->addHour()->toDateTimeString(),
         ]);
     }
+
+    public function withDoctorAndClinic(int $doctorId, int $clinicId): static
+    {
+        return $this->state([
+            'doctor_id' => $doctorId,
+            'clinic_id' => $clinicId,
+        ]);
+    }
 }

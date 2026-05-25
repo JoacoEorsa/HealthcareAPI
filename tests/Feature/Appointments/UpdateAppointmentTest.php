@@ -46,11 +46,9 @@ describe('appointments', function (): void {
         actingAs($patient, 'api');
 
         $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
             ->aWeekFromNow()
-            ->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertOk()
@@ -101,10 +99,9 @@ describe('appointments', function (): void {
 
         actingAs($patient, 'api');
 
-        $data = UpdateAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertUnprocessable();
@@ -131,10 +128,9 @@ describe('appointments', function (): void {
 
         actingAs($patient, 'api');
 
-        $data = UpdateAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertUnprocessable();
@@ -153,10 +149,9 @@ describe('appointments', function (): void {
 
         actingAs($patient, 'api');
 
-        $data = UpdateAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertOk();
@@ -173,10 +168,9 @@ describe('appointments', function (): void {
 
         actingAs($patient, 'api');
 
-        $data = UpdateAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertUnprocessable();
@@ -190,10 +184,9 @@ describe('appointments', function (): void {
             ->createOne();
         actingAs($patient, 'api');
 
-        $data = UpdateAppointmentRequestFactory::new()->create([
-            'doctor_id' => 9999,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = UpdateAppointmentRequestFactory::new()
+            ->withDoctorAndClinic(999, $clinic->id)
+            ->create();
 
         putJson(url("/api/appointments/$appointment->id"), $data)
             ->assertNotFound();

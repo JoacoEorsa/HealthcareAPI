@@ -42,10 +42,8 @@ describe('appointments', function (): void {
         $doctor = DoctorFactory::new()->withClinic($clinic)->createOne();
 
         $data = StoreAppointmentRequestFactory::new()
-            ->create([
-                'doctor_id' => $doctor->id,
-                'clinic_id' => $clinic->id,
-                ]);
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -88,10 +86,8 @@ describe('appointments', function (): void {
             actingAs($patient, 'api');
 
             $data = StoreAppointmentRequestFactory::new()
-                ->create([
-                'doctor_id' => $doctor->id,
-                'clinic_id' => $clinic->id,
-                ]);
+                ->withDoctorAndClinic($doctor->id, $clinic->id)
+                ->create();
 
             $response = postJson(url('/api/appointments'), $data);
 
@@ -113,10 +109,9 @@ describe('appointments', function (): void {
             ->for($patient2)
             ->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-            ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -140,10 +135,8 @@ describe('appointments', function (): void {
             ->createOne();
 
         $data = StoreAppointmentRequestFactory::new()
-            ->create([
-                'doctor_id' => $doctor->id,
-                'clinic_id' => $clinic->id,
-                ]);
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         $response = postJson(url('/api/appointments'), $data);
 
@@ -176,10 +169,9 @@ describe('appointments', function (): void {
         $patient = PatientFactory::new()->createOne();
         actingAs($patient, 'api');
 
-        $data = StoreAppointmentRequestFactory::new()->create([
-            'doctor_id' => 9999,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->withDoctorAndClinic(999, $clinic->id)
+            ->create();
 
         postJson(url('/api/appointments'), $data)
             ->assertNotFound();
@@ -201,10 +193,8 @@ describe('appointments', function (): void {
 
         $data = StoreAppointmentRequestFactory::new()
             ->aWeekFromNow()
-            ->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         postJson(url('/api/appointments'), $data)
             ->assertCreated();
@@ -224,10 +214,9 @@ describe('appointments', function (): void {
             ->for($otherPatient)
             ->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $clinic->id)
+            ->create();
 
         postJson(url('/api/appointments'), $data)
             ->assertCreated();
@@ -240,10 +229,9 @@ describe('appointments', function (): void {
 
         $doctor = DoctorFactory::new()->withExpiredClinicAssigment($clinic)->createOne();
 
-        $data = StoreAppointmentRequestFactory::new()->create([
-            'doctor_id' => $doctor->id,
-            'clinic_id' => $clinic->id,
-        ]);
+        $data = StoreAppointmentRequestFactory::new()
+            ->withDoctorAndClinic($doctor->id, $patient->id)
+            ->create();
 
         postJson(url('/api/appointments'), $data)
             ->assertUnprocessable();
