@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Lightit\Clinics\Domain\Models\Clinic;
 use Lightit\Doctors\Domain\Models\Doctor;
 
 /**
@@ -25,6 +26,14 @@ class DoctorFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName()
         ];
+    }
+
+    public function withClinic(Clinic $clinic): static{
+        return $this->hasAttached($clinic, [], 'clinics');
+    }
+
+    public function withExpiredClinicAssigment(Clinic $clinic): static{
+        return $this->hasAttached($clinic, ['ended_at' => now()->subDay()], 'clinics');
     }
 
 }
